@@ -29,7 +29,7 @@ export default function Sidebar({
             children:[
                 {
                     title:'Add New Project',
-                    path:''
+                    path:'/projects/add'
                 },
                 {
                     title:'All Project',
