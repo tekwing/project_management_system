@@ -1,0 +1,8 @@
+# Treat all TSX and JSX files as primary code
+*.tsx linguist-documentation=false
+*.jsx linguist-documentation=false
+
+# Optional: Tell GitHub to ignore vendor/framework files to balance the percentages
+vendor/* linguist-vendored
+storage/* linguist-vendored
+bootstrap/* linguist-vendored
