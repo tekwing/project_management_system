@@ -1,8 +1,13 @@
-# Treat all TSX and JSX files as primary code
-*.tsx linguist-documentation=false
-*.jsx linguist-documentation=false
+# Force GitHub to count React TypeScript files heavily
+*.tsx linguist-language=TypeScript
+*.ts linguist-language=TypeScript
 
-# Optional: Tell GitHub to ignore vendor/framework files to balance the percentages
+# Hide Laravel system, framework, and vendor files from statistics
 vendor/* linguist-vendored
 storage/* linguist-vendored
 bootstrap/* linguist-vendored
+app/Providers/* linguist-vendored
+config/* linguist-vendored
+
+# Hide Blade templates if you want React to be dominant
+*.blade.php linguist-vendored
