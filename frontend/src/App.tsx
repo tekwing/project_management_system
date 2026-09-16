@@ -3,14 +3,24 @@ import { Routes, Route } from "react-router-dom";
 import Dashboard from './features/dashboard/pages/Dashboard';
 import Projects from './features/projects/pages/Projects';
 import AddProject from './features/projects/pages/AddProject/AddProject';
+import AddMember from './features/team/pages/AddMember';
+import Members from './features/team/pages/Members';
+import AddTask from './features/tasks/pages/AddTask/AddTask';
+import Tasks from './features/tasks/pages/Tasks';
+import AddLead from './features/sales/leads/AddLead';
 
 function App(){
   return(
      <Routes>
           <Route path="/" element={<AppLayout />}>
-               <Route index path='/' element={<Dashboard/>} />
-               <Route path='/projects' element={<Projects/>} />
-               <Route path='/projects/add' element={<AddProject/>} />
+               <Route index element={<Dashboard/>} />
+               <Route path='projects' element={<Projects/>} />
+               <Route path='projects/add' element={<AddProject/>} />
+               <Route path='members/add' element={<AddMember/>} />
+               <Route path='members' element={<Members/>} />
+               <Route path='tasks/add' element={<AddTask/>} />
+               <Route path='tasks' element={<Tasks/>} />
+               <Route path='sales/lead/add' element={<AddLead/>} />
           </Route>
       </Routes>
   );
