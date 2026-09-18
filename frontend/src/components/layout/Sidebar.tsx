@@ -8,7 +8,8 @@ import {
     UsersRound,
     Circle,
     ChevronDown,
-    ChevronRight
+    ChevronRight,
+    Handshake 
 } from "lucide-react";
 
 type SidebarProps = {
@@ -59,10 +60,11 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         },
         {
             title: 'Sales',
-            icon: Users,
+            icon: Handshake ,
             children: [
                 { title: 'Add New Lead', path: 'sales/lead/add' },
-                { title: 'All Leads', path: '/users' }
+                { title: 'All Leads', path: 'sales/leads' },
+                { title: 'PipeLine', path: 'sales/pipeline'}
             ]
         },
     ];

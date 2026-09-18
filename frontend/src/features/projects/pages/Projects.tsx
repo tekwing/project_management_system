@@ -163,7 +163,7 @@ function Projects() {
                             </div>
                             
                             {/* Card Stats (Tasks & Comments) */}
-                            <div className="flex items-center gap-5 text-sm text-gray-500 mb-6 flex-grow">
+                            <div className="flex items-center gap-5 text-sm text-gray-500 mb-6 grow">
                                 <div className="flex items-center gap-1.5">
                                     <CheckSquare size={16} className="text-gray-400" /> 
                                     <span>1/4 Tasks</span>
