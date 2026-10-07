@@ -28,7 +28,8 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     // Leads
     Route::apiResource('leads', LeadController::class);
 
-    
+    // Lead statuses
+    Route::get('/lead-statuses', [LeadStatusController::class, 'index']);
 
     // Lead activities
     Route::get('/leads/{lead}/activities', [LeadActivityController::class, 'index']);
