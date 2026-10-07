@@ -29,4 +29,10 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::apiResource('leads', LeadController::class);
 
     
+
+    // Lead activities
+    Route::get('/leads/{lead}/activities', [LeadActivityController::class, 'index']);
+    Route::post('/leads/{lead}/activities', [LeadActivityController::class, 'store']);
+    Route::get('/leads/{lead}/activities/upcoming', [LeadActivityController::class, 'upcoming_activities']);
+    Route::put('/leads/activities/{leadActivity}/update', [LeadActivityController::class, 'update']);
 });
