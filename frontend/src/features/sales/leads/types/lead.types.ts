@@ -6,7 +6,7 @@ export interface Lead {
     company: string | null;
     job_title: string | null;
     source: string | null;
-    status: 'new' | 'contacted' | 'qualified' | 'proposal_sent' | 'won' | 'lost';
+    status: string;
     created_at: string;
     updated_at: string;
 }
@@ -20,7 +20,7 @@ export interface CreateLeadPayload {
     status_id?: string;  
     source?: string;
     notes?: string;
-    assignee?:string;
+    assigned_to?:string;
 }
 
 export interface ApiResponse<T> {
@@ -39,7 +39,7 @@ export interface LeadActivity {
   id: number;
   type: string;
   next_action?: string;
-  status_value?: string;
+  status?: string;
   scheduled_at?: string;
   created_at: string;
   description: string;

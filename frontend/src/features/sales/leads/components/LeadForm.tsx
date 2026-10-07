@@ -13,12 +13,12 @@ import { useLeadStatus } from '../hooks/useLeadStatus';
 const leadSchema = zod.object({
     name: zod.string().min(1, 'Lead name is required.'),
     email: zod.email('Invalid email address.').optional().or(zod.string().max(0)),
-    company_name: zod.string().optional(),
+    company: zod.string().optional(),
     job_title: zod.string().optional(),
     phone: zod.string().optional(),
     status_id: zod.string().optional(),
     source: zod.string().optional(),
-    assignee: zod.string().optional(),
+    assigned_to: zod.string().optional(),
 });
 
 function LeadForm(){
@@ -38,10 +38,10 @@ function LeadForm(){
     ];
 
     const assignToDropdown = [
-        { label: "Sales Rep 1", value: "sales_rep_1" },
-        { label: "Sales Rep 2", value: "sales_rep_2" },
-        { label: "Sales Rep 3", value: "sales_rep_3" },
-        { label: "Sales Manager", value: "sales_manager" },
+        { label: "Sales Rep 1", value: "1" },
+        { label: "Sales Rep 2", value: "2" },
+        { label: "Sales Rep 3", value: "3" },
+        { label: "Sales Manager", value: "4" },
     ];
 
     const { mutate, isPending } = useCreateLead();
@@ -56,12 +56,12 @@ function LeadForm(){
             job_title: "",
             status_id: "",
             source: "",
-            assignee: "",
+            assigned_to: "",
         }
     });
 
     const onSubmit = (data: CreateLeadPayload) => {
-        // console.log("FORM DATA:", data);
+        //console.log("FORM DATA:", data);
 
         const toastId = toast.loading('Creating lead...');
         mutate(data, {
@@ -209,7 +209,7 @@ function LeadForm(){
                 {/* 📝 ASSIGNEE DROPDOWN */}
                 <div className="flex flex-col">
                     <Controller
-                        name="assignee"
+                        name="assigned_to"
                         control={control}
                         render={({ field }) => (
                             <DropdownComponent
