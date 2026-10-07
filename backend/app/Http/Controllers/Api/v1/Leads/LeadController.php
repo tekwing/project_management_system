@@ -29,7 +29,7 @@ class LeadController extends Controller
      */
     public function store(StoreLeadRequest $request, CreateLead $createLead) 
     {
-        //dd("HELLO! I AM INSIDE THE LEAD CONTROLLER STORE METHOD!");
+       
         $lead = $createLead->handle(
             $request->validated(),
             $request->user()

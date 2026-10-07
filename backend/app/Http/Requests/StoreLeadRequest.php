@@ -25,19 +25,29 @@ class StoreLeadRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
 
-            'email' => ['nullable','email','max:255',],
+            'email' => ['nullable', 'email', 'max:255'],
 
-            'phone' => ['nullable','string','max:20',],
+            'phone' => ['nullable', 'string', 'max:20'],
 
-            'company' => ['nullable','string','max:255',],
+            'company' => ['nullable', 'string', 'max:255'],
 
-            'source' => ['nullable','string','max:100',],
+            'job_title' => ['nullable', 'string', 'max:255'],
 
-            'assigned_to' => ['nullable','integer','exists:users,id',],
+            'source' => ['nullable', 'string', 'max:100'],
 
-            'status' => ['nullable', 'string', 'in:new,contacted,qualified,proposal_sent,won,lost'],
-            
-            'notes' => ['nullable','string',],
+            'assigned_to' => [
+                'nullable',
+                'integer',
+                'exists:users,id',
+            ],
+
+            'status_id' => [
+                'nullable',
+                'integer',
+                'exists:lead_statuses,id',
+            ],
+
+            'notes' => ['nullable', 'string'],
         ];
     }
 }
