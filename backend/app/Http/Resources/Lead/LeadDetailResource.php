@@ -22,7 +22,7 @@ class LeadDetailResource extends JsonResource
             'phone' => $this->phone,
             'company' => $this->company,
             'source' => $this->source,
-            'status' => $this->status->value,
+            'status' => $this->status,
             'job_title' => $this->job_title,
 
             'assigned_to' => $this->when(
