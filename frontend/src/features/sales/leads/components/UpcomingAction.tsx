@@ -133,6 +133,14 @@ export default function UpcomingAction({id}:{id:string}){
 
         return `${day}/${month}/${year}`;
     };
+
+    if (isLoading) {
+        return <div>Loading activities...</div>;
+    }
+    if (error) {
+        return <div>Failed to load activities.</div>;
+    }
+    
     return(
         <>
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 overflow-hidden">

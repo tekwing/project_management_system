@@ -3,94 +3,23 @@ import { useParams,useNavigate } from "react-router-dom";
 import { 
     ArrowLeft, Mail, Phone, Building2,Briefcase, 
     Edit2, Trash2, Clock, 
-    CalendarPlus, AlertCircle, ChevronDown, X
+    CalendarPlus, AlertCircle
 } from "lucide-react";
 
 import ActivityForm from '../components/ActivityForm';
 import ActivityList from '../components/ActivityList';
 import UpcomingAction from '../components/UpcomingAction'
 import { useLeadDetails } from '../hooks/useLeadDetails';
-
-// Mock data for a single lead
-const leadData = {
-    id: "LD-001",
-    name: "Alice Freeman",
-    title: "VP of Engineering",
-    company: "TechNova Solutions",
-    email: "alice@technova.com",
-    phone: "+1 (555) 123-4567",
-    location: "San Francisco, CA",
-    status: "New",
-    value: "$12,500",
-    source: "Website Referral",
-    industry: "Software Development",
-    website: "www.technova.com",
-    dateAdded: "Sep 15, 2026",
-    avatar: "https://ui-avatars.com/api/?name=Alice+Freeman&background=e0e7ff&color=4f46e5",
-};
-
-
-// Initial state for history log
-const initialHistory = [
-    {
-        id: 101,
-        type: "email",
-        title: "Sent introductory email with pricing deck",
-        date: "Sep 18, 2026 at 10:30 AM",
-        user: "You"
-    },
-    {
-        id: 102,
-        type: "call",
-        title: "Discovery Call (15 mins)",
-        date: "Sep 17, 2026 at 2:00 PM",
-        user: "You",
-        note: "Alice is very interested in the Enterprise tier. They need SSO and custom reporting. Scheduled a full demo for next Tuesday."
-    }
-];
+import LeadStatusDropDown from '../components/LeadStatusDropdown';
 
 export default function LeadDetails() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
     const { data: lead, isLoading, error } = useLeadDetails(id ?? '');
-
-    const [leadStatus, setLeadStatus] = useState(leadData.status);
-    
-    const [history, setHistory] = useState(initialHistory);
     
     // Tab & Input States
     const [actionTab, setActionTab] = useState<'note' | 'meeting' | 'followup'>('note');
-
-    // Date formatting helpers
-    const getFormattedNow = () => {
-        const now = new Date();
-        return now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + 
-               " at " + now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-    };
-
-    const getStatusStyle = (status: string) => {
-        switch (status) {
-            case "New": return "bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100";
-            case "Contacted": return "bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100";
-            case "Qualified": return "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100";
-            case "Lost": return "bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100";
-            default: return "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100";
-        }
-    };
-
-    const [statusOpen, setStatusOpen] = useState(false);
-
-    const statuses = [
-        { value: "New", label: "New Lead", color: "bg-blue-500" },
-        { value: "Contacted", label: "Contacted", color: "bg-yellow-500" },
-        { value: "Qualified", label: "Qualified", color: "bg-emerald-500" },
-        { value: "Lost", label: "Lost", color: "bg-red-500" },
-    ];
-
-    const currentStatus = statuses.find(
-        (status) => status.value === leadStatus
-    );
 
     if (isLoading) return <div className="p-8 text-center text-gray-500">Retrieving full lead memory file...</div>;
     if (error || !lead) return <div className="p-8 text-center text-red-500">Error mapping profile records. It may have been deleted.</div>;
@@ -116,7 +45,7 @@ export default function LeadDetails() {
             {/* Main Header Profile Card */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div className="flex items-center gap-5">
-                    <img src={leadData.avatar} alt={leadData.name} className="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover" />
+                    <img src="null" alt={lead.name} className="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover" />
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">{lead.name}</h1>
                         <div className="flex flex-wrap items-center gap-4 mt-2 text-sm text-gray-600">
@@ -132,55 +61,7 @@ export default function LeadDetails() {
                 </div>
                 
                 <div className="flex flex-col sm:flex-row items-center gap-4 lg:border-l lg:border-gray-100 lg:pl-6 w-full lg:w-auto">
-                    <div className="relative">
-                        <button
-                            type="button"
-                            onClick={() => setStatusOpen(!statusOpen)}
-                            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold border shadow-sm ${getStatusStyle(leadStatus)}`}
-                        >
-                            <span
-                                className={`w-2 h-2 rounded-full ${currentStatus?.color}`}
-                            />
-
-                            {currentStatus?.label}
-
-                            <ChevronDown size={16} />
-                        </button>
-
-                        {statusOpen && (
-                            <div className="absolute z-50 mt-2 w-44 rounded-lg border border-gray-200 bg-white shadow-lg p-1">
-                                {statuses.map((status) => (
-                                    <button
-                                        key={status.value}
-                                        type="button"
-                                        onClick={() => {
-                                            setLeadStatus(status.value);
-                                            setStatusOpen(false);
-
-                                            setHistory([
-                                                {
-                                                    id: Date.now(),
-                                                    type: "status",
-                                                    title: `Lead status changed to ${status.value}`,
-                                                    date: getFormattedNow(),
-                                                    user: "You",
-                                                },
-                                                ...history,
-                                            ]);
-                                        }}
-                                        className="flex items-center gap-2 w-full px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-100"
-                                    >
-                                        <span
-                                            className={`w-2 h-2 rounded-full ${status.color}`}
-                                        />
-
-                                        {status.label}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-
+                    <LeadStatusDropDown  leadId={lead.id} status={lead.status}/>
 
                     <div className="hidden sm:block w-px h-8 bg-gray-200"></div>
 
@@ -243,7 +124,7 @@ export default function LeadDetails() {
                         <div className="space-y-4">
                             <div>
                                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-1">Estimated Value</p>
-                                <p className="text-2xl font-bold text-emerald-600">{leadData.value}</p>
+                                <p className="text-2xl font-bold text-emerald-600">{lead.email}</p>
                             </div>
                         </div>
                     </div>
@@ -254,11 +135,11 @@ export default function LeadDetails() {
                         <div className="space-y-4 text-sm">
                             <div className="flex items-start gap-3">
                                 <Mail size={16} className="text-gray-400 mt-0.5" />
-                                <div><p className="font-medium text-gray-900">{leadData.email}</p></div>
+                                <div><p className="font-medium text-gray-900">{lead.email}</p></div>
                             </div>
                             <div className="flex items-start gap-3">
                                 <Phone size={16} className="text-gray-400 mt-0.5" />
-                                <div><p className="font-medium text-gray-900">{leadData.phone}</p></div>
+                                <div><p className="font-medium text-gray-900">{lead.phone}</p></div>
                             </div>
                         </div>
                     </div>

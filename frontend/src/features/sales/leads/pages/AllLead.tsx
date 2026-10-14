@@ -14,7 +14,7 @@ export default function AllLead() {
     const [cardGridEnabled, setCardGrid] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Helper for Status badges
+    const [currentPage, setCurrentPage] = useState(1);
     
 
     return (
@@ -87,12 +87,16 @@ export default function AllLead() {
 
             {/* Table View */}
             {!cardGridEnabled && (
-                <LeadTable/>
+                <LeadTable
+                    currentPage={currentPage}
+                    onPageChange={setCurrentPage}/>
             )}
 
             {/* Grid / Card View */}
             {cardGridEnabled && (
-                <LeadCard/>
+                <LeadCard
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}/>
             )}
         </div>
     );

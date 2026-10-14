@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type  { 
     Lead, 
+    PaginatedLeads,
     CreateLeadPayload, 
     ApiResponse, 
     LeadDetailsData, 
@@ -8,9 +9,8 @@ import type  {
     LeadActivity, 
     ActivitiesResponse, 
     Activity,
-    UpdateActivity, LeadStatus  } 
+    UpdateActivity, LeadStatus ,UpdateLeadStatus } 
     from '../types/lead.types';
-
 const apiClient = axios.create({
     baseURL: 'http://127.0.0.1:2000/api/v1',
     headers: {
@@ -28,9 +28,16 @@ apiClient.interceptors.request.use((config) => {
 });
 
 // Clean, type-safe API calls
-export const getLeads = async (): Promise<Lead[]> => {
-    const response = await apiClient.get<ApiResponse<Lead[]>>('/leads');
-    return response.data.data;
+
+
+export const getLeads = async (
+    page: number = 1
+): Promise<PaginatedLeads> => {
+    const response = await apiClient.get<PaginatedLeads>(
+        `/leads?page=${page}`
+    );
+
+    return response.data;
 };
 
 export const createLead = async (payload: CreateLeadPayload): Promise<Lead> => {
@@ -100,3 +107,15 @@ export const getLeadStatus = async (): Promise<LeadStatus[]> => {
     return response.data.data;
 };
 
+export const updateLeadStatus = async (
+    lead_id: string,
+    formData: UpdateLeadStatus 
+): Promise<Activity> => {
+
+    const response = await apiClient.patch<ApiResponse<Activity>>(
+        `/leads/${lead_id}/status`,
+        formData
+    );
+
+    return response.data.data;
+};
