@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\LeadActivity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Lead extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'name',
         'email',
@@ -38,6 +40,6 @@ class Lead extends Model
 
     public function status(): BelongsTo
     {
-        return $this->belongsTo(LeadStatus::class, 'status_id');
+        return $this->belongsTo(LeadStatus::class, 'status');
     }
 }

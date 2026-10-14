@@ -27,6 +27,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
 
     // Leads
     Route::apiResource('leads', LeadController::class);
+    Route::patch('leads/{lead}/status',[LeadController::class, 'updateStatus']);
 
     // Lead statuses
     Route::get('/lead-statuses', [LeadStatusController::class, 'index']);
