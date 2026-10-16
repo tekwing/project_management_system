@@ -1,7 +1,7 @@
 
 import { useLeads } from '../hooks/useLeads';
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
+import Loader from '../../../../components/common/LoaderComponent';
 import {
     MoreVertical, 
     Edit2, 
@@ -13,11 +13,13 @@ import {
 type LeadTableProps = {
     currentPage: number;
     onPageChange: (page: number) => void;
+    selectedStatus: string;
 };
 
 export default function LeadTable({
             currentPage,
             onPageChange,
+            selectedStatus
         }: LeadTableProps){
     const navigate = useNavigate();
     const getStatusBadge = (status: string) => {
@@ -30,14 +32,14 @@ export default function LeadTable({
         }
     };
    // 💡 Fetch caching state directly out of our React Query custom hook
-    const { data: leadsResponse, isLoading, isFetching, error } = useLeads(currentPage);
+    const { data: leadsResponse, isLoading, isFetching, error } = useLeads(currentPage, selectedStatus);
     // The actual array of leads
     const leads = leadsResponse?.data ?? [];
 
     // Pagination information is inside the meta object
     const totalPages = leadsResponse?.meta.last_page ?? 1;
     const totalLeads = leadsResponse?.meta.total ?? 0;
-    const perPage = leadsResponse?.meta.per_page ?? 10;
+    // const perPage = leadsResponse?.meta.per_page ?? 10;
 
     const startItem = leadsResponse?.meta.from ?? 0;
     const endItem = leadsResponse?.meta.to ?? 0;
@@ -72,60 +74,7 @@ export default function LeadTable({
     };
 
     if (isLoading) {
-        return (
-            <div className="flex min-h-[250px] flex-col items-center justify-center gap-4 rounded-xl bg-white">
-            <div className="loader" role="status" aria-label="Loading" />
-
-            <p
-                className="animate-pulse text-sm font-medium text-indigo-600"
-                aria-live="polite"
-            >
-                Loading leads...
-            </p>
-
-            <style>
-                {`
-                .loader {
-                    width: 22px;
-                    aspect-ratio: 1;
-                    background: #4f46e5;
-                    box-shadow: 0 0 30px 8px rgb(79 70 229 / 25%);
-                    transform: translateX(-65px);
-                    clip-path: inset(0);
-                    animation:
-                    loader-move 0.8s ease-in-out infinite alternate,
-                    loader-clip 1.6s ease-in-out infinite;
-                }
-
-                @keyframes loader-move {
-                    to {
-                    transform: translateX(65px);
-                    }
-                }
-
-                @keyframes loader-clip {
-                    33% {
-                    clip-path: inset(0 0 0 -70px);
-                    }
-                    50% {
-                    clip-path: inset(0);
-                    }
-                    83% {
-                    clip-path: inset(0 -70px 0 0);
-                    }
-                }
-
-                @media (prefers-reduced-motion: reduce) {
-                    .loader {
-                    animation: none;
-                    transform: none;
-                    clip-path: none;
-                    }
-                }
-                `}
-            </style>
-            </div>
-        );
+        return <Loader content="Retrieving full lead memory file..." />;
         }
     if (error) return <p style={{ textAlign: 'center', color: 'red' }}>Error loading data from Laravel API.</p>;
     return(

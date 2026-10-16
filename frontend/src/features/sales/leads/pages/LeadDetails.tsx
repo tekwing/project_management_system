@@ -11,6 +11,7 @@ import ActivityList from '../components/ActivityList';
 import UpcomingAction from '../components/UpcomingAction'
 import { useLeadDetails } from '../hooks/useLeadDetails';
 import LeadStatusDropDown from '../components/LeadStatusDropdown';
+import Loader from '../../../../components/common/LoaderComponent';
 
 export default function LeadDetails() {
     const { id } = useParams<{ id: string }>();
@@ -21,7 +22,10 @@ export default function LeadDetails() {
     // Tab & Input States
     const [actionTab, setActionTab] = useState<'note' | 'meeting' | 'followup'>('note');
 
-    if (isLoading) return <div className="p-8 text-center text-gray-500">Retrieving full lead memory file...</div>;
+    if (isLoading) {
+        return <Loader content="Retrieving full lead memory file..." />;
+    }
+        
     if (error || !lead) return <div className="p-8 text-center text-red-500">Error mapping profile records. It may have been deleted.</div>;
     
     return (

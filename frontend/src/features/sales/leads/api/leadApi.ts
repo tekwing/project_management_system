@@ -31,11 +31,19 @@ apiClient.interceptors.request.use((config) => {
 
 
 export const getLeads = async (
-    page: number = 1
+    page: number = 1,
+    statusId?: string
 ): Promise<PaginatedLeads> => {
     const response = await apiClient.get<PaginatedLeads>(
-        `/leads?page=${page}`
+        `/leads?page=${page}`,{
+            params:{
+                ...(statusId && statusId != 'all' ? {status_id: statusId}:{})
+            }
+        }
     );
+
+     console.log('Request URL:', response.config.url);
+    console.log('Request params:', response.config.params);
 
     return response.data;
 };
