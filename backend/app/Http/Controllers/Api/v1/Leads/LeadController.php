@@ -18,16 +18,19 @@ class LeadController extends Controller
      */
     public function index(Request $request)
     {
-        DB::listen(function ($query) {
-        Log::info('SQL', [
-            'sql' => $query->sql,
-            'bindings' => $query->bindings,
-            'time_ms' => $query->time,
-        ]);
-    });
+        // DB::listen(function ($query) {
+        //     Log::info('SQL', [
+        //         'sql' => $query->sql,
+        //         'bindings' => $query->bindings,
+        //         'time_ms' => $query->time,
+        //     ]);
+        // });
+
+        $statusId = $request->query('status_id');
 
         $leads = Lead::query()
             ->with('assignee')
+            ->where('status', $statusId)
             ->latest()
             ->paginate(10);
 
